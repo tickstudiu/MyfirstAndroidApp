@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText myEditText;
-    private TextView myTextView;
+    private TextView myTextView,myTextTitle;
     private double val,cal;
-    private String aus;
+    private String aus,subfix;
+    private RadioButton tof,toc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myEditText = findViewById(R.id.editText1);
-
+        myTextTitle = findViewById(R.id.textView1);
+        tof = findViewById(R.id.radio_pirates);
+        toc = findViewById(R.id.radio_ninjas);
+        tof.setChecked(true);
 
         myEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -33,9 +38,16 @@ public class MainActivity extends AppCompatActivity {
                 myTextView = findViewById(R.id.textView2);
                 if (s.length() != 0) {
                     val = Double.parseDouble(s.toString());
-                    cal = (val * 1.8) + 32;
-                    aus = Double.toString(cal);
-                    myTextView.setText(aus + " ํF");
+                    if (tof.isChecked()){
+                        subfix = " ํF";
+                        myTextTitle.setText("fahrenheit");
+                        cal = (val * 1.8) + 32;
+                    }else {
+                        subfix = " ํC";
+                        myTextTitle.setText("celsius");
+                        cal = (val - 32) / 1.8;
+                    }
+                    myTextView.setText(aus.format("%.2f", cal) + subfix);
                 }else {
                     myTextView.setText(" ");
                 }
